@@ -1,0 +1,7 @@
+{
+	"apSSID": "esp8266",
+	"apPassword": "defaultpassword",
+	"clientSSID": "your-wifi",
+	"clientPassword": "your-password",
+	"hostname": "esp8266"
+}

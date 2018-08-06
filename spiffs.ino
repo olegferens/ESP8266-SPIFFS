@@ -1,5 +1,5 @@
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h> 
+#include <WiFiClient.h>
 #include <ESP8266mDNS.h>
 #include <ArduinoOTA.h>
 #include <ESP8266WebServer.h>
@@ -22,6 +22,7 @@ struct Configuration {
 String permitted_domain_characters[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"};
 
 String reset_html = "<title>I have been hack</title>"
+                    "<font face=\"verdana\">"
                     "<style>"
                     "body"
                     "{"
@@ -36,6 +37,27 @@ String reset_html = "<title>I have been hack</title>"
 
 // Main index html page for web server
 String index_html = "<title>I have been hack</title>"
+                    "<font face=\"verdana\">"
+                    "<style type=\"text/css\">"
+                    "#submit {"
+                    "  background-color: #34FF34;"
+                    "  padding: .5em;"
+                    "  -moz-border-radius: 5px;"
+                    "  -webkit-border-radius: 5px;"
+                    "  border-radius: 6px;"
+                    "  color: #fff;"
+                    "  font-family: 'verdana';"
+                    "  font-size: 20px;"
+                    "  text-decoration: none;"
+                    "  border: none;"
+                    "}"
+
+                    "#submit:hover {"
+                    "  border: none;"
+                    "  background: cyan;"
+                    "  box-shadow: 0px 0px 1px #777;"
+                    "}"
+                    "</style>"
                     "<style>"
                     "body"
                     "{"
@@ -48,6 +70,7 @@ String index_html = "<title>I have been hack</title>"
                     "<br>"
                     "<center><span style=\"font-size: +50px\"/>I made a thing do some stuff</span></center>"
                     "<br><br>"
+                    ""
                     "<html><body>"
                     "  <center>"                    
                     "  <form  name='frm' method='get'>"
@@ -59,10 +82,14 @@ String index_html = "<title>I have been hack</title>"
                     "    <input type='text' name='new_ssid' placeholder=\"SSID\"><br>"
                     "    <input type='password' name='new_password' placeholder=\"Password\"><br>"
                     "    <br><br>"
-                    "    <input type='text' name='new_hostname' placeholder=\"hostname\"><br>"
-                    "    <input type='submit' value='Submit'>"
-                    "    <br>"
-                    "    <a href=\"restart_esp8266\" class=\"button\"><span style=\"font-size: +50px; color: #FF0000\"/>Restart</span></a>"
+                    "    <input type='text' name='new_hostname' placeholder=\"hostname\">"
+                    "    <br><br>"
+                    "    <input type='submit' id='submit' value='Submit'>"
+                    "  </form>"
+                    "  <br><br>"
+                    ""
+                    "  <form action=\"/restart_esp8266\">"
+                    "    <input type=\"submit\" id=\"submit\" value=\"Restart\"/>"
                     "  </form>"
                     "  </center>"
                     "</body></html>";

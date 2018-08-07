@@ -21,31 +21,17 @@ struct Configuration {
 
 String permitted_domain_characters[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"};
 
-String reset_html = "<title>I have been hack</title>"
-                    "<font face=\"verdana\">"
-                    "<style>"
-                    "body"
-                    "{"
-                    "  color: #00FF00;"
-                    "  background-color: #000000;"
-                    "}"
-                    "</style>"
-                    "<br>"
-                    "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
-                    "<br>"
-                    "<center><span style=\"font-size: +50px\"/>Module restarting...</span></center>";
-
-// Main index html page for web server
-String index_html = "<title>I have been hack</title>"
+// Html string that holds the page configuration
+String page_config_html = "<title>I have been hack</title>"
                     "<font face=\"verdana\">"
                     "<style type=\"text/css\">"
                     "#submit {"
-                    "  background-color: #34FF34;"
+                    "  background-color: #c10000;"
                     "  padding: .5em;"
                     "  -moz-border-radius: 5px;"
                     "  -webkit-border-radius: 5px;"
                     "  border-radius: 6px;"
-                    "  color: #fff;"
+                    "  color: #black;"
                     "  font-family: 'verdana';"
                     "  font-size: 20px;"
                     "  text-decoration: none;"
@@ -61,16 +47,56 @@ String index_html = "<title>I have been hack</title>"
                     "<style>"
                     "body"
                     "{"
-                    "  color: #00FF00;"
+                    "  color: #c10000;"
                     "  background-color: #000000;"
                     "}"
+                    "</style>";
+
+// Html string that holds the menu
+String menu_html =  "<style>"
+                    ".topnav {"
+                    "  background-color: #333;"
+                    "  overflow: hidden;"
+                    "}"
+                    ""
+                    ".topnav a {"
+                    "    float: left;"
+                    "    color: #f2f2f2;"
+                    "    text-align: center;"
+                    "    padding: 14px 16px;"
+                    "    text-decoration: none;"
+                    "    font-size: 17px;"
+                    "}"
+                    ""
+                    ""
+                    ".topnav a:hover {"
+                    "    background-color: #c10000;"
+                    "    color: black;"
+                    "}"
                     "</style>"
+                    ""
+                    "<div class=\"topnav\">"
+                    "  <a href=\"/\">Home</a>"
+                    "  <a href=\"settings\">Settings</a>"
+                    "  <a href=\"about\">About</a>"
+                    "</div>";
+
+// Reset html page
+String reset_html = page_config_html +
+                    menu_html +
+                    "<br>"
+                    "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
+                    "<br>"
+                    "<center><span style=\"font-size: +50px\"/>Module restarting...</span></center>";
+
+// Settings html page for web server
+String settings_html = page_config_html +
+                    menu_html +
                     "<br>"
                     "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
                     "<br>"
                     "<center><span style=\"font-size: +50px\"/>I made a thing do some stuff</span></center>"
                     "<br><br>"
-                    ""
                     "<html><body>"
                     "  <center>"                    
                     "  <form  name='frm' method='get'>"
@@ -93,6 +119,29 @@ String index_html = "<title>I have been hack</title>"
                     "  </form>"
                     "  </center>"
                     "</body></html>";
+                    
+                    
+// About html page
+String about_html = page_config_html +
+
+                    menu_html +
+                    
+                    "<br>"
+                    "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
+                    "<br>"
+                    "<center><span style=\"font-size: +50px\"/>About</span></center>";
+
+
+// Main index html page for web server
+String index_html = page_config_html +
+
+                    menu_html +
+                    
+                    "<br>"
+                    "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
+                    "<br>"
+                    "<center><span style=\"font-size: +50px\"/>I made a thing do some stuff</span></center>";
+                    
                     
 ESP8266WebServer server(80);
 //WiFiServer server(80);
@@ -167,6 +216,8 @@ bool startAP(const char* apssid, const char* password)
 
   server.on("/", HandleClient);
   server.on("/restart_esp8266", RestartESP);
+  server.on("/settings", SettingsESP);
+  server.on("/about", AboutESP);
   
   server.begin();
 
@@ -212,6 +263,8 @@ bool joinWiFi(const char* ssid, const char* password)
 
   server.on("/", HandleClient);
   server.on("/restart_esp8266", RestartESP);
+  server.on("/settings", SettingsESP);
+  server.on("/about", AboutESP);
   
   server.begin();
 
@@ -315,12 +368,12 @@ bool saveConfig() {
 
 
 
-// Function to handle client input when at /
+// Function to handle client input when at /settings
 // No Args
 // No Return
-void HandleClient()
+void SettingsESP()
 {
-  server.send(200, "text/html", index_html);
+  server.send(200, "text/html", settings_html);
   if (server.args() > 0)
   {
     Serial.println("Server arguments received");
@@ -376,6 +429,31 @@ void RestartESP()
   server.send(200, "text/html", reset_html);
   ESP.reset();
 }
+
+
+
+
+
+// Function to handle client at /
+// No Args
+// No Return
+void HandleClient()
+{
+  server.send(200, "text/html", index_html);
+}
+
+
+
+
+
+// Function to handle client at /about
+// No Args
+// No Return
+void AboutESP()
+{
+  server.send(200, "text/html", about_html);
+}
+
 
 
 

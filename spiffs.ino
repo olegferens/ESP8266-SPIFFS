@@ -55,13 +55,15 @@ String page_config_html = "<title>I have been hack</title>"
 // Html string that holds the menu
 String menu_html =  "<style>"
                     ".topnav {"
-                    "  background-color: #333;"
+                    "  background-color: #2f3136;"
+                    "  border-left: solid #c10000 5px;"
+                    "  border-radius: 3px;"
                     "  overflow: hidden;"
                     "}"
                     ""
                     ".topnav a {"
                     "    float: left;"
-                    "    color: #f2f2f2;"
+                    "    color: #bfbfbb;"
                     "    text-align: center;"
                     "    padding: 14px 16px;"
                     "    text-decoration: none;"
@@ -73,25 +75,53 @@ String menu_html =  "<style>"
                     "    background-color: #c10000;"
                     "    color: black;"
                     "}"
+                    ""
+                    ".topnav-right {"
+                    "  float: right;"
+                    "}"
+                    ""
                     "</style>"
                     ""
                     "<div class=\"topnav\">"
                     "  <a href=\"/\">Home</a>"
                     "  <a href=\"settings\">Settings</a>"
-                    "  <a href=\"about\">About</a>"
+                    "  <div class=\"topnav-right\">"
+                    "    <a href=\"about\">About</a>"
+                    "  </div>"
                     "</div>";
 
+// Header for html pages
+String h1_html = "<style>"
+                    "h1 {"
+                    "    font-size: 1.7rem;"
+                    "    margin-top: 1rem;"
+                    "    margin-left: auto;"
+                    "    margin-right: auto;"
+                    "    background: #2f3136;"
+                    "    color: #bfbfbb;"
+                    "    padding: 0.2em 1em;"
+                    "    border-radius: 3px;"
+                    "    border-left: solid #c10000 5px;"
+                    "    font-weight: 100;"
+                    "}" 
+                    "</style>"
+                    "";
+
 // Reset html page
-String reset_html = page_config_html +
+String reset_html = h1_html +
+                    page_config_html +
                     menu_html +
+                    "<h1 class=\"header\" data-translate=\"restart\">Restart</h1>"
                     "<br>"
                     "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
                     "<br>"
                     "<center><span style=\"font-size: +50px\"/>Module restarting...</span></center>";
 
 // Settings html page for web server
-String settings_html = page_config_html +
+String settings_html = h1_html + 
+                    page_config_html +
                     menu_html +
+                    "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>"
                     "<br>"
                     "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
                     "<br>"
@@ -122,10 +152,10 @@ String settings_html = page_config_html +
                     
                     
 // About html page
-String about_html = page_config_html +
-
+String about_html = h1_html +
+                    page_config_html +
                     menu_html +
-                    
+                    "<h1 class=\"header\" data-translate=\"about\">About</h1>"
                     "<br>"
                     "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
                     "<br>"
@@ -133,10 +163,10 @@ String about_html = page_config_html +
 
 
 // Main index html page for web server
-String index_html = page_config_html +
-
+String index_html = h1_html +
+                    page_config_html +
                     menu_html +
-                    
+                    "<h1 class=\"header\" data-translate=\"home\">Home</h1>"
                     "<br>"
                     "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
                     "<br>"

@@ -85,6 +85,7 @@ String menu_html =  "<style>"
                     "<div class=\"topnav\">"
                     "  <a href=\"/\">Home</a>"
                     "  <a href=\"settings\">Settings</a>"
+                    "  <a href=\"api/settings\">API</a>"
                     "  <div class=\"topnav-right\">"
                     "    <a href=\"about\">About</a>"
                     "  </div>"
@@ -248,6 +249,7 @@ bool startAP(const char* apssid, const char* password)
   server.on("/restart_esp8266", RestartESP);
   server.on("/settings", SettingsESP);
   server.on("/about", AboutESP);
+  server.on("/api/settings", APIESP);
   
   server.begin();
 
@@ -295,6 +297,7 @@ bool joinWiFi(const char* ssid, const char* password)
   server.on("/restart_esp8266", RestartESP);
   server.on("/settings", SettingsESP);
   server.on("/about", AboutESP);
+  server.on("/api/settings", APIESP);
   
   server.begin();
 
@@ -445,6 +448,26 @@ void SettingsESP()
     }
     saveConfig();
   }
+}
+
+
+
+
+
+// Function to handle client at /api/settings
+// Displays settings in json format
+// No Args
+// No Return
+void APIESP()
+{
+  String json_string = "{"
+                "    \"apSSID\": \"" + global_conf.apSSID + "\","
+                "    \"apPassword\": \"" + global_conf.apPassword + "\","
+                "    \"clientSSID\": \"" + global_conf.clientSSID + "\","
+                "    \"clientPassword\": \"" + global_conf.clientPassword + "\","
+                "    \"hostname\": \"" + global_conf.hostname + "\""
+                "}";
+  server.send(200, "application/json", json_string);
 }
 
 

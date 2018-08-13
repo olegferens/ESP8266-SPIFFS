@@ -272,6 +272,7 @@ bool startAP(const char* apssid, const char* password)
   server.on("/settings", SettingsESP);
   server.on("/about", AboutESP);
   server.on("/api/settings", APIESP);
+  server.on("/api/set", ProcessJSONPost);
   
   server.begin();
 
@@ -320,6 +321,7 @@ bool joinWiFi(const char* ssid, const char* password)
   server.on("/settings", SettingsESP);
   server.on("/about", AboutESP);
   server.on("/api/settings", APIESP);
+  server.on("/api/set", ProcessJSONPost);
   
   server.begin();
 
@@ -482,14 +484,80 @@ void SettingsESP()
 // No Return
 void APIESP()
 {
+  String ap_pass = "";
+  String client_pass = "";
+
+  for (int i = 0; i < global_conf.clientPassword.length(); i++)
+    client_pass = client_pass + "*";
+
+  for (int i = 0; i < global_conf.apPassword.length(); i++)
+    ap_pass = ap_pass + "*";
+  
   String json_string = "{"
                 "    \"apSSID\": \"" + global_conf.apSSID + "\","
-                "    \"apPassword\": \"" + global_conf.apPassword + "\","
+                "    \"apPassword\": \"" + ap_pass + "\","
                 "    \"clientSSID\": \"" + global_conf.clientSSID + "\","
-                "    \"clientPassword\": \"" + global_conf.clientPassword + "\","
+                "    \"clientPassword\": \"" + client_pass + "\","
                 "    \"hostname\": \"" + global_conf.hostname + "\""
                 "}";
   server.send(200, "application/json", json_string);
+}
+
+
+
+// Function to handle JSON API post data
+// No Args
+// No Return
+void ProcessJSONPost()
+{
+  server.send(200, "application/json", "{\"success\": true}");
+  if (server.args() > 0)
+  {
+    Serial.println("Server arguments received");
+    for (uint8_t i = 0; i < server.args(); i++)
+    {
+      Serial.println(server.argName(i));
+
+      // When JSON API is used
+      if (server.argName(i) == "json_post" && server.arg(i).length() > 0)
+      {
+        Serial.print("JSON API Post: ");
+        Serial.println(server.arg(i));
+
+        StaticJsonBuffer<250> jsonBuffer;
+        JsonObject& json = jsonBuffer.parseObject(server.arg(i));
+      
+        // Load JSON into local variables
+        const char* apSSID = json["apSSID"];
+        const char* apPassword = json["apPassword"];
+        const char* clientSSID = json["clientSSID"];
+        const char* clientPassword = json["clientPassword"];
+        const char* hostname = json["hostname"];
+      
+        // Load local variables into struct
+        global_conf.apSSID = apSSID;
+        global_conf.apPassword = apPassword;
+        global_conf.clientSSID = clientSSID;
+        global_conf.clientPassword = clientPassword;
+        global_conf.hostname = hostname;
+      
+        // Output struct
+        Serial.print("Loaded apSSID: ");
+        Serial.println(global_conf.apSSID);
+        Serial.print("Loaded apPassword: ");
+        Serial.println(global_conf.apPassword);
+        Serial.print("Loaded clientSSID: ");
+        Serial.println(global_conf.clientSSID);
+        Serial.print("Loaded clientPassword: ");
+        Serial.println(global_conf.clientPassword);
+        Serial.print("Loaded hostname: ");
+        Serial.println(global_conf.hostname);
+      
+        // Save the new config
+        saveConfig();
+      }
+    }
+  }
 }
 
 
@@ -570,7 +638,7 @@ void setup() {
   }
 
   Serial.print("http://");
-  Serial.print(WiFi.localIP());
+  Serial.println(WiFi.localIP());
 }
 
 

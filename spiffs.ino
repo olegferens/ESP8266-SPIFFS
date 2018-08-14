@@ -28,17 +28,28 @@ String domain_name_prefix = "rota";
 
 String permitted_domain_characters[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"};
 
+
+
+// CSS Colors
+String color1 = "#c10000";
+String color2 = "#000000";
+String color3 = "#2f3136";
+String color4 = "#bfbfbb";
+String color5 = "";
+
+
+
 // Html string that holds the page configuration
 String page_style_css = "<title>I have been hack</title>"
                     "<font face=\"verdana\">"
                     "<style type=\"text/css\">"
                     "    #submit {"
-                    "        background-color: #c10000;"
+                    "        background-color: " + color1 + ";"
                     "        padding: .5em;"
                     "        -moz-border-radius: 5px;"
                     "        -webkit-border-radius: 5px;"
                     "        border-radius: 6px;"
-                    "        color: #black;"
+                    "        color: " + color2 + ";"
                     "        font-family: 'verdana';"
                     "        font-size: 20px;"
                     "        text-decoration: none;"
@@ -52,18 +63,18 @@ String page_style_css = "<title>I have been hack</title>"
                     "    }"
                     "    body"
                     "    {"
-                    "        color: #c10000;"
-                    "        background-color: #000000;"
+                    "        color: " + color1 + ";"
+                    "        background-color: " + color2 + ";"
                     "    }"
                     "    .topnav {"
-                    "        background-color: #2f3136;"
-                    "        border-left: solid #c10000 5px;"
+                    "        background-color: " + color3 + ";"
+                    "        border-left: solid " + color1 + " 5px;"
                     "        border-radius: 3px;"
                     "        overflow: hidden;"
                     "    }"
                     "    .topnav a {"
                     "        float: left;"
-                    "        color: #bfbfbb;"
+                    "        color: " + color4 + ";"
                     "        text-align: center;"
                     "        padding: 4px 10px;"
                     "        text-decoration: none;"
@@ -75,7 +86,7 @@ String page_style_css = "<title>I have been hack</title>"
                     "        margin-bottom: 0.5rem;"
                     "    }"
                     "    .topnav a:hover {"
-                    "        background-color: #c10000;"
+                    "        background-color: " + color1 + ";"
                     "        color: black;"
                     "    }"
                     "    .topnav-right {"
@@ -86,11 +97,11 @@ String page_style_css = "<title>I have been hack</title>"
                     "        margin-top: 1rem;"
                     "        margin-left: auto;"
                     "        margin-right: auto;"
-                    "        background: #2f3136;"
-                    "        color: #bfbfbb;"
+                    "        background: " + color3 + ";"
+                    "        color: " + color4 + ";"
                     "        padding: 0.2em 1em;"
                     "        border-radius: 3px;"
-                    "        border-left: solid #c10000 5px;"
+                    "        border-left: solid " + color1 + " 5px;"
                     "        font-weight: 100;"
                     "    }"
                     "    h2 {"
@@ -98,11 +109,11 @@ String page_style_css = "<title>I have been hack</title>"
                     "        margin-top: 1rem;"
                     "        margin-left: auto;"
                     "        margin-right: auto;"
-                    "        background: #2f3136;"
-                    "        color: #bfbfbb;"
+                    "        background: " + color3 + ";"
+                    "        color: " + color4 + ";"
                     "        padding: 0.2em 1em;"
                     "        border-radius: 3px;"
-                    "        border-left: solid #c10000 5px;"
+                    "        border-left: solid " + color1 + " 5px;"
                     "        font-weight: 100;"
                     "    }"
                     "    .column {"
@@ -113,10 +124,10 @@ String page_style_css = "<title>I have been hack</title>"
                     "        float: right;"
                     "        margin-top: 0.5rem;"
                     "        background: transparent;"
-                    "        color: #bfbfbb;"
+                    "        color: " + color4 + ";"
                     "        outline: 0;"
                     "        border: 0;"
-                    "        border-bottom: solid #c10000 2px;"
+                    "        border-bottom: solid " + color1 + " 2px;"
                     "        font-size: 14px;"
                     "    }"
                     "    .column input {"
@@ -140,8 +151,8 @@ String page_style_css = "<title>I have been hack</title>"
                     "    }"
                     ""    
                     "    hr {"
-                    "      border-color: #2f3136;"
-                    "        background-color: #2f3136;"
+                    "      border-color: " + color3 + ";"
+                    "        background-color: " + color3 + ";"
                     "        height: 2px;"
                     "        border: none;"
                     "    }"
@@ -203,9 +214,12 @@ String GenSettingsHTML()
   return page_style_css +
                     menu_html +
                     "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>"
-                    "<br><br>"
                     "<html><body>"
                     "    <div class=\"column\">"
+                    "    <form action=\"/restart_esp8266\">"
+                    "        <input type=\"submit\" id=\"submit\" value=\"Restart\"/>"
+                    "    </form>"
+                    "    <br><br><br>"
                     "    <form name='frm' method='get'>"
                     "            <h2 class=\"header\" data-translate=\"settings\">WiFi Connection Settings</h2>"
                     "            <about/>Use these settings to connect this device to a WiFi Network in your area.</about>"
@@ -242,9 +256,6 @@ String GenSettingsHTML()
                     "            <input type='submit' id='submit' value='Apply'>"
                     "      </form>"
                     ""
-                    "        <form action=\"/restart_esp8266\">"
-                    "            <input type=\"submit\" id=\"submit\" value=\"Restart\"/>"
-                    "        </form>"
                     "    </div>"
                     "</body></html>";
 }
@@ -597,24 +608,38 @@ void ProcessJSONPost()
         const char* clientPassword = json["clientPassword"];
         const char* hostname = json["hostname"];
       
-        // Load local variables into struct
-        global_conf.apSSID = apSSID;
-        global_conf.apPassword = apPassword;
-        global_conf.clientSSID = clientSSID;
-        global_conf.clientPassword = clientPassword;
-        global_conf.hostname = hostname;
+        // Load local variables into struct and output
+        if (strlen(apSSID) > 0)
+        {
+          global_conf.apSSID = apSSID;
+          Serial.print("Loaded apSSID: ");
+          Serial.println(global_conf.apSSID);
+        }
+        if (strlen(apPassword) > 0)
+        {
+          global_conf.apPassword = apPassword;
+          Serial.print("Loaded apPassword: ");
+          Serial.println(global_conf.apPassword);
+        }
+        if (strlen(clientSSID) > 0)
+        {
+          global_conf.clientSSID = clientSSID;
+          Serial.print("Loaded clientSSID: ");
+          Serial.println(global_conf.clientSSID);
+        }
+        if (strlen(clientPassword) > 0)
+        {
+          global_conf.clientPassword = clientPassword;
+          Serial.print("Loaded clientPassword: ");
+          Serial.println(global_conf.clientPassword);
+        }
+        if (strlen(hostname) > 0)
+        {
+          global_conf.hostname = hostname;
+          Serial.print("Loaded hostname: ");
+          Serial.println(global_conf.hostname);
+        }
       
-        // Output struct
-        Serial.print("Loaded apSSID: ");
-        Serial.println(global_conf.apSSID);
-        Serial.print("Loaded apPassword: ");
-        Serial.println(global_conf.apPassword);
-        Serial.print("Loaded clientSSID: ");
-        Serial.println(global_conf.clientSSID);
-        Serial.print("Loaded clientPassword: ");
-        Serial.println(global_conf.clientPassword);
-        Serial.print("Loaded hostname: ");
-        Serial.println(global_conf.hostname);
       
         // Save the new config
         saveConfig();

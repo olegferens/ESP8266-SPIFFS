@@ -19,6 +19,13 @@ struct Configuration {
   String hostname;
 };
 
+ESP8266WebServer server(80);
+//WiFiServer server(80);
+
+struct Configuration global_conf;
+
+String domain_name_prefix = "rota";
+
 String permitted_domain_characters[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"};
 
 // Html string that holds the page configuration
@@ -110,6 +117,7 @@ String page_style_css = "<title>I have been hack</title>"
                     "        outline: 0;"
                     "        border: 0;"
                     "        border-bottom: solid #c10000 2px;"
+                    "        font-size: 14px;"
                     "    }"
                     "    .column input {"
                     "        clear: both;"
@@ -117,6 +125,25 @@ String page_style_css = "<title>I have been hack</title>"
                     "    .column span {"
                     "        margin-top: 0.5rem;"
                     "        display: inline-block;"
+                    "    }"
+                    "    .column about {"
+                    "      font-size: +12px;"
+                    "    }"
+                    ""    
+                    "   .column spanr {"
+                    "        margin-top: 0.5rem;"
+                    "    }"
+                    ""    
+                    "    .prefix {"
+                    "      display: flex;"
+                    "        justify-content: space-between;"
+                    "    }"
+                    ""    
+                    "    hr {"
+                    "      border-color: #2f3136;"
+                    "        background-color: #2f3136;"
+                    "        height: 2px;"
+                    "        border: none;"
                     "    }"
                     "</style>";
 
@@ -139,41 +166,6 @@ String reset_html = page_style_css +
                     "<br>"
                     "<center><span style=\"font-size: +50px\"/>Module restarting...</span></center>";
 
-// Settings html page for web server
-String settings_html = page_style_css +
-                    menu_html +
-                    "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>"
-                    "<br><br>"
-                    "<html><body>"
-                    "    <div class=\"column\">"
-                    "    <form name='frm' method='get'>"
-                    "            <h2 class=\"header\" data-translate=\"settings\">WiFi Connection Settings</h2>"
-                    "            <br>"
-                    "            <span style=\"font-size: +15px\"/>WiFi Connection SSID</span>"
-                    "            <input type='text' name='new_target_ssid' placeholder=\"SSID\"><br>"
-                    "            <span style=\"font-size: +15px\"/>WiFi Connection Password</span>"
-                    "            <input type='password' name='new_target_password' placeholder=\"Password\"><br>"
-                    "            <br><br>"
-                    "            <h2 class=\"header\" data-translate=\"settings\">Access Point Settings</h2>"
-                    "            <br>"
-                    "            <span style=\"font-size: +15px\"/>Access Point SSID</span>"
-                    "            <input type='text' name='new_ssid' placeholder=\"SSID\"><br>"
-                    "            <span style=\"font-size: +15px\"/>Access Point Password</span>"
-                    "            <input type='password' name='new_password' placeholder=\"Password\"><br>"
-                    "            <br><br>"
-                    "            <h2 class=\"header\" data-translate=\"settings\">mDNS Settings</h2>"
-                    "            <br>"
-                    "            <span style=\"font-size: +15px\"/>mDNS Domain Name</span>"
-                    "            <input type='text' name='new_hostname' placeholder=\"Hostname\">"
-                    "            <br><br>"
-                    "            <input type='submit' id='submit' value='Apply'>"
-                    "      </form>"
-                    ""
-                    "        <form action=\"/restart_esp8266\">"
-                    "            <input type=\"submit\" id=\"submit\" value=\"Restart\"/>"
-                    "        </form>"
-                    "    </div>"
-                    "</body></html>";
                     
                     
 // About html page
@@ -196,10 +188,71 @@ String index_html = page_style_css +
                     "<center><span style=\"font-size: +50px\"/>I made a thing do some stuff</span></center>";
                     
                     
-ESP8266WebServer server(80);
-//WiFiServer server(80);
 
-struct Configuration global_conf;
+
+
+
+
+
+// Settings html page for web server
+// Function to generate settings page based on current configuration
+// No args
+// Return 1 String
+String GenSettingsHTML()
+{
+  return page_style_css +
+                    menu_html +
+                    "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>"
+                    "<br><br>"
+                    "<html><body>"
+                    "    <div class=\"column\">"
+                    "    <form name='frm' method='get'>"
+                    "            <h2 class=\"header\" data-translate=\"settings\">WiFi Connection Settings</h2>"
+                    "            <about/>Use these settings to connect this device to a WiFi Network in your area.</about>"
+                    "            <hr>"
+                    "            <br>"
+                    "            <span style=\"font-size: +14px\"/>WiFi Connection SSID</span>"
+                    "            <input type='text' name='new_target_ssid' value='" + global_conf.clientSSID + "' placeholder=\"SSID\"><br>"
+                    "            <span style=\"font-size: +14px\"/>WiFi Connection Password</span>"
+                    "            <input type='password' name='new_target_password' value='" + global_conf.clientPassword + "' placeholder=\"Password\"><br>"
+                    "            <br><br>"
+                    "            <h2 class=\"header\" data-translate=\"settings\">Access Point Settings</h2>"
+                    "            <about/>Use these settings to configure this device's access point. These settings will be used by other wireless clients when they connect to this device.</about>"
+                    "            <hr>"
+                    "            <br>"
+                    "            <span style=\"font-size: +14px\"/>Access Point SSID</span>"
+                    "            <input type='text' name='new_ssid' value='" + global_conf.apSSID + "' placeholder=\"SSID\"><br>"
+                    "            <span style=\"font-size: +14px\"/>Access Point Password</span>"
+                    "            <input type='password' name='new_password' value='" + global_conf.apPassword + "' placeholder=\"Password\"><br>"
+                    "            <br><br>"
+                    "            <h2 class=\"header\" data-translate=\"settings\">mDNS Settings</h2>"
+                    "            <about/>The mDNS settings are used to ensure other clients on the same network can access this device using a domain name rather than an IP address.</about>"
+                    "            <br>"
+                    "            <about/><b>Note:</b> The domain name will have a default prefix of \"" + domain_name_prefix + "\".</about>"
+                    "            <hr>"
+                    "            <br>"
+                    "            <div class='prefix'>"
+                    "                <span style='font-size: +14px'/>mDNS Domain Name</span>"
+                    "                <div style='text-align: right'>"
+                    "                    <span style='font-size: +14px'/>" + domain_name_prefix + "-</span>"
+                    "                    <input type='text' name='new_hostname' value='" + global_conf.hostname + "' placeholder='Hostname'>"
+                    "                </div>"
+                    "            </div>"
+                    "            <br><br>"
+                    "            <input type='submit' id='submit' value='Apply'>"
+                    "      </form>"
+                    ""
+                    "        <form action=\"/restart_esp8266\">"
+                    "            <input type=\"submit\" id=\"submit\" value=\"Restart\"/>"
+                    "        </form>"
+                    "    </div>"
+                    "</body></html>";
+}
+
+
+
+
+
 
 // Function to convert the hostname to a domain name
 // Compare each charater to the list of acceptable characters
@@ -246,6 +299,26 @@ String ConvertHostname()
 
 
 
+// Function to tell server how to behave for each address
+// No args
+// No Return
+void SetServerBehavior()
+{
+  server.on("/", HandleClient);
+  server.on("/restart_esp8266", RestartESP);
+  server.on("/settings", SettingsESP);
+  server.on("/about", AboutESP);
+  server.on("/api/settings", APIESP);
+  server.on("/api/set", ProcessJSONPost);
+  
+  server.begin();
+
+  MDNS.addService("http", "tcp", 80);
+}
+
+
+
+
 
 // Function to start an AP if it cant connect to one
 // SSID and Password Args
@@ -267,16 +340,7 @@ bool startAP(const char* apssid, const char* password)
     return false;
   }
 
-  server.on("/", HandleClient);
-  server.on("/restart_esp8266", RestartESP);
-  server.on("/settings", SettingsESP);
-  server.on("/about", AboutESP);
-  server.on("/api/settings", APIESP);
-  server.on("/api/set", ProcessJSONPost);
-  
-  server.begin();
-
-  MDNS.addService("http", "tcp", 80);
+  SetServerBehavior();
 
   return true;
 }
@@ -316,16 +380,7 @@ bool joinWiFi(const char* ssid, const char* password)
     return false;
   }
 
-  server.on("/", HandleClient);
-  server.on("/restart_esp8266", RestartESP);
-  server.on("/settings", SettingsESP);
-  server.on("/about", AboutESP);
-  server.on("/api/settings", APIESP);
-  server.on("/api/set", ProcessJSONPost);
-  
-  server.begin();
-
-  MDNS.addService("http", "tcp", 80);
+  SetServerBehavior();
   
   return true;
 }
@@ -335,6 +390,7 @@ bool joinWiFi(const char* ssid, const char* password)
 
 
 // Function to load the JSON file from SPIFFS into a config struct
+// No args
 // Returns config struct
 struct Configuration loadConfig() {
   struct Configuration conf;
@@ -430,7 +486,7 @@ bool saveConfig() {
 // No Return
 void SettingsESP()
 {
-  server.send(200, "text/html", settings_html);
+  server.send(200, "text/html", GenSettingsHTML());
   if (server.args() > 0)
   {
     Serial.println("Server arguments received");
@@ -478,26 +534,33 @@ void SettingsESP()
 
 
 
+// Function to convert shit to *
+// Takes 1 String arg
+// Returns 1 String
+String HideString(String plain)
+{
+  String hidden = "";
+  
+  for (int i = 0; i < plain.length(); i++)
+    hidden = hidden + "*";
+
+  return hidden;
+}
+
+
+
+
 // Function to handle client at /api/settings
 // Displays settings in json format
 // No Args
 // No Return
 void APIESP()
-{
-  String ap_pass = "";
-  String client_pass = "";
-
-  for (int i = 0; i < global_conf.clientPassword.length(); i++)
-    client_pass = client_pass + "*";
-
-  for (int i = 0; i < global_conf.apPassword.length(); i++)
-    ap_pass = ap_pass + "*";
-  
+{ 
   String json_string = "{"
                 "    \"apSSID\": \"" + global_conf.apSSID + "\","
-                "    \"apPassword\": \"" + ap_pass + "\","
+                "    \"apPassword\": \"" + HideString(global_conf.apPassword) + "\","
                 "    \"clientSSID\": \"" + global_conf.clientSSID + "\","
-                "    \"clientPassword\": \"" + client_pass + "\","
+                "    \"clientPassword\": \"" + HideString(global_conf.clientPassword) + "\","
                 "    \"hostname\": \"" + global_conf.hostname + "\""
                 "}";
   server.send(200, "application/json", json_string);

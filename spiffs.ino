@@ -609,31 +609,31 @@ void ProcessJSONPost()
         const char* hostname = json["hostname"];
       
         // Load local variables into struct and output
-        if (strlen(apSSID) > 0)
+        if (json.containsKey("apSSID"))
         {
           global_conf.apSSID = apSSID;
           Serial.print("Loaded apSSID: ");
           Serial.println(global_conf.apSSID);
         }
-        if (strlen(apPassword) > 0)
+        if (json.containsKey("apPassword"))
         {
           global_conf.apPassword = apPassword;
           Serial.print("Loaded apPassword: ");
           Serial.println(global_conf.apPassword);
         }
-        if (strlen(clientSSID) > 0)
+        if (json.containsKey("clientSSID"))
         {
           global_conf.clientSSID = clientSSID;
           Serial.print("Loaded clientSSID: ");
           Serial.println(global_conf.clientSSID);
         }
-        if (strlen(clientPassword) > 0)
+        if (json.containsKey("clientPassword"))
         {
           global_conf.clientPassword = clientPassword;
           Serial.print("Loaded clientPassword: ");
           Serial.println(global_conf.clientPassword);
         }
-        if (strlen(hostname) > 0)
+        if (json.containsKey("hostname"))
         {
           global_conf.hostname = hostname;
           Serial.print("Loaded hostname: ");

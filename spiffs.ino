@@ -301,6 +301,8 @@ String ConvertHostname()
       domain_name = domain_name + comp_char;
   }
 
+  domain_name = domain_name_prefix + "-" + domain_name;
+
   Serial.print("mDNS Domain Name: ");
   Serial.println(domain_name);
   
@@ -315,6 +317,12 @@ String ConvertHostname()
 // No Return
 void SetServerBehavior()
 {
+  if (!MDNS.begin((const char*)ConvertHostname().c_str()))
+  {
+    Serial.println("Could not configure mDNS");
+    return;
+  }
+  
   server.on("/", HandleClient);
   server.on("/restart_esp8266", RestartESP);
   server.on("/settings", SettingsESP);
@@ -344,12 +352,6 @@ bool startAP(const char* apssid, const char* password)
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(myIP);
-
-  if (!MDNS.begin((const char*)ConvertHostname().c_str()))
-  {
-    Serial.println("Could not configure mDNS");
-    return false;
-  }
 
   SetServerBehavior();
 
@@ -384,12 +386,6 @@ bool joinWiFi(const char* ssid, const char* password)
   Serial.println("Connection established!");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
-  if (!MDNS.begin((const char*)ConvertHostname().c_str()))
-  {
-    Serial.println("Could not configure mDNS");
-    return false;
-  }
 
   SetServerBehavior();
   

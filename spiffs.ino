@@ -654,6 +654,7 @@ void ProcessJSONPost()
 void RestartESP()
 {
   server.send(200, "text/html", reset_html);
+  delay(5000);
   ESP.reset();
 }
 

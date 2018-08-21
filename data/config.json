@@ -3,5 +3,7 @@
 	"apPassword": "defaultpassword",
 	"clientSSID": "your-wifi",
 	"clientPassword": "your-password",
-	"hostname": "esp8266"
+	"hostname": "esp8266",
+	"www_username": "username",
+	"www_password": "password"
 }

@@ -17,25 +17,27 @@ struct Configuration {
   String clientSSID;
   String clientPassword;
   String hostname;
+  String www_username;
+  String www_password;
 };
 
-ESP8266WebServer server(80);
-//WiFiServer server(80);
+ESP8266WebServer server(80); // Initialize web server
 
+// Setup global vars
+int esp12led = 2;
+int nodemculed = 16;
 struct Configuration global_conf;
-
 String domain_name_prefix = "rota";
-
 String permitted_domain_characters[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"};
 
 
 
 // CSS Colors
-String color1 = "#c10000";
-String color2 = "#000000";
-String color3 = "#2f3136";
-String color4 = "#bfbfbb";
-String color5 = "";
+String color1 = "#c10000"; // Accent
+String color2 = "#000000"; // Background
+String color3 = "#2f3136"; // Bar
+String color4 = "#bfbfbb"; // Text
+String color5 = "#ffe500"; // Important Bar
 
 
 
@@ -114,6 +116,17 @@ String page_style_css = "<title>I have been hack</title>"
                     "        padding: 0.2em 1em;"
                     "        border-radius: 3px;"
                     "        border-left: solid " + color1 + " 5px;"
+                    "        font-weight: 100;"
+                    "    }"
+                    "    h3 {"
+                    "        font-size: 1rem;"
+                    "        margin-top: 1rem;"
+                    "        margin-left: auto;"
+                    "        margin-right: auto;"
+                    "        background: " + color5 + ";"
+                    "        color: " + color2 + ";"
+                    "        padding: 0.2em 1em;"
+                    "        border-radius: 3px;"
                     "        font-weight: 100;"
                     "    }"
                     "    .column {"
@@ -221,6 +234,17 @@ String GenSettingsHTML()
                     "    </form>"
                     "    <br><br><br>"
                     "    <form name='frm' method='get'>"
+                    ""
+                    "            <h2 class=\"header\" data-translate=\"settings\">Admin Settings</h2>"
+                    "            <about/>Use these settings when logging in to this web page.</about>"
+                    "            <hr>"
+                    "            <br>"
+                    "            <span style=\"font-size: +14px\"/>Admin Username</span>"
+                    "            <input type='text' name='www_username' value='" + global_conf.www_username + "' placeholder=\"Username\"><br>"
+                    "            <span style=\"font-size: +14px\"/>Admin Password</span>"
+                    "            <input type='password' name='www_password' value='" + global_conf.www_password + "' placeholder=\"Password\"><br>"
+                    "            <br><br>"
+                    ""
                     "            <h2 class=\"header\" data-translate=\"settings\">WiFi Connection Settings</h2>"
                     "            <about/>Use these settings to connect this device to a WiFi Network in your area.</about>"
                     "            <hr>"
@@ -230,6 +254,7 @@ String GenSettingsHTML()
                     "            <span style=\"font-size: +14px\"/>WiFi Connection Password</span>"
                     "            <input type='password' name='new_target_password' value='" + global_conf.clientPassword + "' placeholder=\"Password\"><br>"
                     "            <br><br>"
+                    ""
                     "            <h2 class=\"header\" data-translate=\"settings\">Access Point Settings</h2>"
                     "            <about/>Use these settings to configure this device's access point. These settings will be used by other wireless clients when they connect to this device.</about>"
                     "            <hr>"
@@ -239,6 +264,7 @@ String GenSettingsHTML()
                     "            <span style=\"font-size: +14px\"/>Access Point Password</span>"
                     "            <input type='password' name='new_password' value='" + global_conf.apPassword + "' placeholder=\"Password\"><br>"
                     "            <br><br>"
+                    ""
                     "            <h2 class=\"header\" data-translate=\"settings\">mDNS Settings</h2>"
                     "            <about/>The mDNS settings are used to ensure other clients on the same network can access this device using a domain name rather than an IP address.</about>"
                     "            <br>"
@@ -252,6 +278,7 @@ String GenSettingsHTML()
                     "                    <input type='text' name='new_hostname' value='" + global_conf.hostname + "' placeholder='Hostname'>"
                     "                </div>"
                     "            </div>"
+                    "            <h3 class='header' data-translate='settings'><spon style='font-size: +14px'>URL</spon><spon style='float: right;font-size: +14px'>http://" + ConvertHostname() + ".local</spon></h3>"
                     "            <br><br>"
                     "            <input type='submit' id='submit' value='Apply'>"
                     "      </form>"
@@ -323,12 +350,44 @@ void SetServerBehavior()
     return;
   }
   
-  server.on("/", HandleClient);
-  server.on("/restart_esp8266", RestartESP);
-  server.on("/settings", SettingsESP);
-  server.on("/about", AboutESP);
-  server.on("/api/settings", APIESP);
-  server.on("/api/set", ProcessJSONPost);
+  //server.on("/", HandleClient);
+  //server.on("/restart_esp8266", RestartESP);
+  //server.on("/settings", SettingsESP);
+  //server.on("/about", AboutESP);
+  //server.on("/api/settings", APIESP);
+  //server.on("/api/set", ProcessJSONPost);
+
+  // Check for authentication on all pages
+  server.on("/", [](){
+    if(!server.authenticate((const char*)global_conf.www_username.c_str(), (const char*)global_conf.www_password.c_str()))
+      return server.requestAuthentication();
+    HandleClient();
+  });
+  server.on("/restart_esp8266", [](){
+    if(!server.authenticate((const char*)global_conf.www_username.c_str(), (const char*)global_conf.www_password.c_str()))
+      return server.requestAuthentication();
+    RestartESP();
+  });
+  server.on("/settings", [](){
+    if(!server.authenticate((const char*)global_conf.www_username.c_str(), (const char*)global_conf.www_password.c_str()))
+      return server.requestAuthentication();
+    SettingsESP();
+  });
+  server.on("/about", [](){
+    if(!server.authenticate((const char*)global_conf.www_username.c_str(), (const char*)global_conf.www_password.c_str()))
+      return server.requestAuthentication();
+    AboutESP();
+  });
+  server.on("/api/settings", [](){
+    if(!server.authenticate((const char*)global_conf.www_username.c_str(), (const char*)global_conf.www_password.c_str()))
+      return server.requestAuthentication();
+    APIESP();
+  });
+  server.on("/api/set", [](){
+    if(!server.authenticate((const char*)global_conf.www_username.c_str(), (const char*)global_conf.www_password.c_str()))
+      return server.requestAuthentication();
+    ProcessJSONPost();
+  });
   
   server.begin();
 
@@ -375,7 +434,7 @@ bool joinWiFi(const char* ssid, const char* password)
   Serial.print(ssid); Serial.println(" ...");
 
   int i = 0;
-  while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
+  while (WiFi.status() != WL_CONNECTED) { // Wait for the WiFi to connect
     delay(1000);
     Serial.print(++i); Serial.print(' ');
     if (i >= 10)
@@ -418,7 +477,7 @@ struct Configuration loadConfig() {
 
   configFile.readBytes(buf.get(), size);
 
-  StaticJsonBuffer<200> jsonBuffer;
+  StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.parseObject(buf.get());
 
   if (!json.success()) {
@@ -432,6 +491,8 @@ struct Configuration loadConfig() {
   const char* clientSSID = json["clientSSID"];
   const char* clientPassword = json["clientPassword"];
   const char* hostname = json["hostname"];
+  const char* www_username = json["www_username"];
+  const char* www_password = json["www_password"];
 
   // Load local variables into struct
   conf.apSSID = apSSID;
@@ -439,6 +500,8 @@ struct Configuration loadConfig() {
   conf.clientSSID = clientSSID;
   conf.clientPassword = clientPassword;
   conf.hostname = hostname;
+  conf.www_username = www_username;
+  conf.www_password = www_password;
 
   // Output struct
   Serial.print("Loaded apSSID: ");
@@ -451,6 +514,10 @@ struct Configuration loadConfig() {
   Serial.println(conf.clientPassword);
   Serial.print("Loaded hostname: ");
   Serial.println(conf.hostname);
+  Serial.print("Loaded username: ");
+  Serial.println(conf.www_username);
+  Serial.print("Loaded password: ");
+  Serial.println(conf.www_password);
   
   return conf;
 }
@@ -463,13 +530,15 @@ struct Configuration loadConfig() {
 // No Args
 // Return save bool
 bool saveConfig() {
-  StaticJsonBuffer<200> jsonBuffer;
+  StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
   json["apSSID"] = global_conf.apSSID;
   json["apPassword"] = global_conf.apPassword;
   json["clientSSID"] = global_conf.clientSSID;
   json["clientPassword"] = global_conf.clientPassword;
   json["hostname"] = global_conf.hostname;
+  json["www_username"] = global_conf.www_username;
+  json["www_password"] = global_conf.www_password;
 
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
@@ -493,7 +562,6 @@ bool saveConfig() {
 // No Return
 void SettingsESP()
 {
-  server.send(200, "text/html", GenSettingsHTML());
   if (server.args() > 0)
   {
     Serial.println("Server arguments received");
@@ -532,9 +600,23 @@ void SettingsESP()
         Serial.println(server.arg(i));
         global_conf.hostname = server.arg(i);
       }
+      else if (server.argName(i) == "www_username" && server.arg(i).length() > 0)
+      {
+        Serial.print("New Username: ");
+        Serial.println(server.arg(i));
+        global_conf.www_username = server.arg(i);
+      }
+      else if (server.argName(i) == "www_password" && server.arg(i).length() > 0)
+      {
+        Serial.print("New Password: ");
+        Serial.println(server.arg(i));
+        global_conf.www_password = server.arg(i);
+      }
     }
     saveConfig();
   }
+  // Show response AFTER setting new config
+  server.send(200, "text/html", GenSettingsHTML());
 }
 
 
@@ -565,10 +647,9 @@ void APIESP()
 { 
   String json_string = "{"
                 "    \"apSSID\": \"" + global_conf.apSSID + "\","
-                "    \"apPassword\": \"" + HideString(global_conf.apPassword) + "\","
                 "    \"clientSSID\": \"" + global_conf.clientSSID + "\","
-                "    \"clientPassword\": \"" + HideString(global_conf.clientPassword) + "\","
-                "    \"hostname\": \"" + global_conf.hostname + "\""
+                "    \"hostname\": \"" + global_conf.hostname + "\","
+                "    \"www_username\": \"" + global_conf.www_username + "\""
                 "}";
   server.send(200, "application/json", json_string);
 }
@@ -594,7 +675,7 @@ void ProcessJSONPost()
         Serial.print("JSON API Post: ");
         Serial.println(server.arg(i));
 
-        StaticJsonBuffer<250> jsonBuffer;
+        StaticJsonBuffer<300> jsonBuffer;
         JsonObject& json = jsonBuffer.parseObject(server.arg(i));
       
         // Load JSON into local variables
@@ -603,6 +684,8 @@ void ProcessJSONPost()
         const char* clientSSID = json["clientSSID"];
         const char* clientPassword = json["clientPassword"];
         const char* hostname = json["hostname"];
+        const char* www_username = json["www_username"];
+        const char* www_password = json["www_password"];
       
         // Load local variables into struct and output
         if (json.containsKey("apSSID"))
@@ -634,6 +717,18 @@ void ProcessJSONPost()
           global_conf.hostname = hostname;
           Serial.print("Loaded hostname: ");
           Serial.println(global_conf.hostname);
+        }
+        if (json.containsKey("www_username"))
+        {
+          global_conf.www_username = www_username;
+          Serial.print("Loaded www_username: ");
+          Serial.println(global_conf.www_username);
+        }
+        if (json.containsKey("www_password"))
+        {
+          global_conf.www_password = www_password;
+          Serial.print("Loaded www_password: ");
+          Serial.println(global_conf.www_password);
         }
       
       
@@ -688,7 +783,8 @@ void AboutESP()
 
 
 void setup() {
-  //struct Configuration conf;
+  pinMode(esp12led, OUTPUT);
+  pinMode(nodemculed, OUTPUT);
 
   Serial.begin(115200);
   Serial.println("------------------------------------");
@@ -732,4 +828,10 @@ void setup() {
 
 void loop() {
   server.handleClient();
+
+  // Let the user know we are in main loop
+  digitalWrite(esp12led, LOW);
+  delay(500);
+  digitalWrite(esp12led, HIGH);
+  delay(500);  
 }

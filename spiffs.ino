@@ -12,6 +12,7 @@ extern "C" {
 
 // Struct for holding JSON configuration
 struct Configuration {
+  bool connect_to_wifi;
   String apSSID;
   String apPassword;
   String clientSSID;
@@ -224,7 +225,7 @@ String index_html = page_style_css +
 // Return 1 String
 String GenSettingsHTML()
 {
-  return page_style_css +
+  String settings_html = page_style_css +
                     menu_html +
                     "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>"
                     "<html><body>"
@@ -239,6 +240,15 @@ String GenSettingsHTML()
                     "            <about/>Use these settings when logging in to this web page.</about>"
                     "            <hr>"
                     "            <br>"
+                    "            <span style='font-size: +14px'/>Connect to WiFi</span>"
+                    "";
+
+  if (global_conf.connect_to_wifi)
+    settings_html = settings_html + "            <input type='checkbox' name='connect_to_wifi' checked><br>";
+  else
+    settings_html = settings_html + "            <input type='checkbox' name='connect_to_wifi'><br>";
+    
+  settings_html = settings_html + ""
                     "            <span style=\"font-size: +14px\"/>Admin Username</span>"
                     "            <input type='text' name='www_username' value='" + global_conf.www_username + "' placeholder=\"Username\"><br>"
                     "            <span style=\"font-size: +14px\"/>Admin Password</span>"
@@ -285,6 +295,8 @@ String GenSettingsHTML()
                     ""
                     "    </div>"
                     "</body></html>";
+
+  return settings_html;
 }
 
 
@@ -486,6 +498,7 @@ struct Configuration loadConfig() {
   }
 
   // Load JSON into local variables
+  bool connect_to_wifi = json["connect_to_wifi"];
   const char* apSSID = json["apSSID"];
   const char* apPassword = json["apPassword"];
   const char* clientSSID = json["clientSSID"];
@@ -495,6 +508,7 @@ struct Configuration loadConfig() {
   const char* www_password = json["www_password"];
 
   // Load local variables into struct
+  conf.connect_to_wifi = connect_to_wifi;
   conf.apSSID = apSSID;
   conf.apPassword = apPassword;
   conf.clientSSID = clientSSID;
@@ -504,6 +518,8 @@ struct Configuration loadConfig() {
   conf.www_password = www_password;
 
   // Output struct
+  Serial.print("Connect to WiFi?: ");
+  Serial.println(conf.connect_to_wifi);
   Serial.print("Loaded apSSID: ");
   Serial.println(conf.apSSID);
   Serial.print("Loaded apPassword: ");
@@ -532,6 +548,7 @@ struct Configuration loadConfig() {
 bool saveConfig() {
   StaticJsonBuffer<300> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
+  json["connect_to_wifi"] = global_conf.connect_to_wifi;
   json["apSSID"] = global_conf.apSSID;
   json["apPassword"] = global_conf.apPassword;
   json["clientSSID"] = global_conf.clientSSID;
@@ -565,11 +582,20 @@ void SettingsESP()
   if (server.args() > 0)
   {
     Serial.println("Server arguments received");
+    
+    global_conf.connect_to_wifi = false;
+    
     for (uint8_t i = 0; i < server.args(); i++)
     {
-      Serial.println(server.argName(i));
+      //Serial.println(server.argName(i));
 
       // BRANCH STATEMENTS TO CHANGE CONFIGURATION
+      if (server.argName(i) == "connect_to_wifi" && server.arg(i).length() > 0)
+      {
+        Serial.print("Connect to WiFi?: ");
+        Serial.println(server.arg(i));
+        global_conf.connect_to_wifi = true;
+      }
       if (server.argName(i) == "new_target_ssid" && server.arg(i).length() > 0)
       {
         Serial.print("New Access Point to connect to: ");
@@ -617,6 +643,8 @@ void SettingsESP()
   }
   // Show response AFTER setting new config
   server.send(200, "text/html", GenSettingsHTML());
+
+  Serial.println("-----------------------------------------");
 }
 
 
@@ -645,8 +673,14 @@ String HideString(String plain)
 // No Return
 void APIESP()
 { 
-  String json_string = "{"
-                "    \"apSSID\": \"" + global_conf.apSSID + "\","
+  String json_string = "{\n";
+  if (global_conf.connect_to_wifi)
+    json_string = json_string + "    \"connect_to_wifi\": true,\n";
+  else
+    json_string = json_string + "    \"connect_to_wifi\": false,\n";
+
+
+  json_string = json_string + "    \"apSSID\": \"" + global_conf.apSSID + "\","
                 "    \"clientSSID\": \"" + global_conf.clientSSID + "\","
                 "    \"hostname\": \"" + global_conf.hostname + "\","
                 "    \"www_username\": \"" + global_conf.www_username + "\""
@@ -665,8 +699,24 @@ void ProcessJSONPost()
   if (server.args() > 0)
   {
     Serial.println("Server arguments received");
+
+    global_conf.connect_to_wifi = false;
+        
     for (uint8_t i = 0; i < server.args(); i++)
     {
+      StaticJsonBuffer<300> jsonBuffer;
+      JsonObject& json = jsonBuffer.parseObject(server.arg(i));
+      
+      // Load JSON into local variables
+      bool connect_to_wifi = json["connect_to_wifi"];
+      const char* apSSID = json["apSSID"];
+      const char* apPassword = json["apPassword"];
+      const char* clientSSID = json["clientSSID"];
+      const char* clientPassword = json["clientPassword"];
+      const char* hostname = json["hostname"];
+      const char* www_username = json["www_username"];
+      const char* www_password = json["www_password"];
+    
       Serial.println(server.argName(i));
 
       // When JSON API is used
@@ -674,20 +724,14 @@ void ProcessJSONPost()
       {
         Serial.print("JSON API Post: ");
         Serial.println(server.arg(i));
-
-        StaticJsonBuffer<300> jsonBuffer;
-        JsonObject& json = jsonBuffer.parseObject(server.arg(i));
-      
-        // Load JSON into local variables
-        const char* apSSID = json["apSSID"];
-        const char* apPassword = json["apPassword"];
-        const char* clientSSID = json["clientSSID"];
-        const char* clientPassword = json["clientPassword"];
-        const char* hostname = json["hostname"];
-        const char* www_username = json["www_username"];
-        const char* www_password = json["www_password"];
       
         // Load local variables into struct and output
+        if (json.containsKey("connect_to_wifi"))
+        {
+          global_conf.connect_to_wifi = connect_to_wifi;
+          Serial.print("Connect to WiFi?: ");
+          Serial.println(global_conf.connect_to_wifi);
+        }
         if (json.containsKey("apSSID"))
         {
           global_conf.apSSID = apSSID;
@@ -806,7 +850,7 @@ void setup() {
   else
   {
     Serial.println("Config Loaded");
-    if (!joinWiFi((const char*)global_conf.clientSSID.c_str(), (const char*)global_conf.clientPassword.c_str()))
+    if (!global_conf.connect_to_wifi || !joinWiFi((const char*)global_conf.clientSSID.c_str(), (const char*)global_conf.clientPassword.c_str()))
     {
       Serial.print("\nUnable to join ");
       Serial.println(global_conf.clientSSID);

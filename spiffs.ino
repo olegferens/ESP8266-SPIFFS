@@ -42,148 +42,148 @@ String color5 = "#ffe500"; // Important Bar
 
 
 
-// Html string that holds the page configuration
-String page_style_css = "<title>I have been hack</title>"
-                    "<font face=\"verdana\">"
-                    "<style type=\"text/css\">"
-                    "    #submit {"
-                    "        background-color: " + color1 + ";"
-                    "        padding: .5em;"
-                    "        -moz-border-radius: 5px;"
-                    "        -webkit-border-radius: 5px;"
-                    "        border-radius: 6px;"
-                    "        color: " + color2 + ";"
-                    "        font-family: 'verdana';"
-                    "        font-size: 20px;"
-                    "        text-decoration: none;"
-                    "        border: none;"
-                    "    }"
-                    "    #submit:hover {"
-                    "        border: none;"
-                    "        background: cyan;"
-                    "        box-shadow: 0px 0px 1px #777;"
-                    "  color: black;"
-                    "    }"
-                    "    body"
-                    "    {"
-                    "        color: " + color1 + ";"
-                    "        background-color: " + color2 + ";"
-                    "    }"
-                    "    .topnav {"
-                    "        background-color: " + color3 + ";"
-                    "        border-left: solid " + color1 + " 5px;"
-                    "        border-radius: 3px;"
-                    "        overflow: hidden;"
-                    "    }"
-                    "    .topnav a {"
-                    "        float: left;"
-                    "        color: " + color4 + ";"
-                    "        text-align: center;"
-                    "        padding: 4px 10px;"
-                    "        text-decoration: none;"
-                    "        font-size: 17px;"
-                    "        border-radius: 3px;"
-                    "        margin-top: 0.5rem;"
-                    "        margin-left: 0.5rem;"
-                    "        margin-right: 0.5rem;"
-                    "        margin-bottom: 0.5rem;"
-                    "    }"
-                    "    .topnav a:hover {"
-                    "        background-color: " + color1 + ";"
-                    "        color: black;"
-                    "    }"
-                    "    .topnav-right {"
-                    "        float: right;"
-                    "    }"
-                    "    h1 {"
-                    "        font-size: 1.7rem;"
-                    "        margin-top: 1rem;"
-                    "        margin-left: auto;"
-                    "        margin-right: auto;"
-                    "        background: " + color3 + ";"
-                    "        color: " + color4 + ";"
-                    "        padding: 0.2em 1em;"
-                    "        border-radius: 3px;"
-                    "        border-left: solid " + color1 + " 5px;"
-                    "        font-weight: 100;"
-                    "    }"
-                    "    h2 {"
-                    "        font-size: 1rem;"
-                    "        margin-top: 1rem;"
-                    "        margin-left: auto;"
-                    "        margin-right: auto;"
-                    "        background: " + color3 + ";"
-                    "        color: " + color4 + ";"
-                    "        padding: 0.2em 1em;"
-                    "        border-radius: 3px;"
-                    "        border-left: solid " + color1 + " 5px;"
-                    "        font-weight: 100;"
-                    "    }"
-                    "    h3 {"
-                    "        font-size: 1rem;"
-                    "        margin-top: 1rem;"
-                    "        margin-left: auto;"
-                    "        margin-right: auto;"
-                    "        background: " + color5 + ";"
-                    "        color: " + color2 + ";"
-                    "        padding: 0.2em 1em;"
-                    "        border-radius: 3px;"
-                    "        font-weight: 100;"
-                    "    }"
-                    "    .column {"
-                    "        margin-left: 10rem;"
-                    "        margin-right: 10rem;"
-                    "    }"
-                    "    .column input {"
-                    "        float: right;"
-                    "        margin-top: 0.5rem;"
-                    "        background: transparent;"
-                    "        color: " + color4 + ";"
-                    "        outline: 0;"
-                    "        border: 0;"
-                    "        border-bottom: solid " + color1 + " 2px;"
-                    "        font-size: 14px;"
-                    "    }"
-                    "    .column input {"
-                    "        clear: both;"
-                    "    }"
-                    "    .column span {"
-                    "        margin-top: 0.5rem;"
-                    "        display: inline-block;"
-                    "    }"
-                    "    .column about {"
-                    "      font-size: +12px;"
-                    "    }"
-                    ""    
-                    "   .column spanr {"
-                    "        margin-top: 0.5rem;"
-                    "    }"
-                    ""    
-                    "    .prefix {"
-                    "      display: flex;"
-                    "        justify-content: space-between;"
-                    "    }"
-                    ""    
-                    "    hr {"
-                    "      border-color: " + color3 + ";"
-                    "        background-color: " + color3 + ";"
-                    "        height: 2px;"
-                    "        border: none;"
-                    "    }"
-                    "</style>";
+// Generate CSS style on the fly to save variable space
+String GenPageStyleCSS()
+{
+  String page_style_css = "<title>I have been hack</title>\n"
+                    "<font face=\"verdana\">\n"
+                    "<style type=\"text/css\">\n"
+                    "    #submit {\n"
+                    "        background-color: " + color1 + ";\n"
+                    "        padding: .5em;\n"
+                    "        -moz-border-radius: 5px;\n"
+                    "        -webkit-border-radius: 5px;\n"
+                    "        border-radius: 6px;\n"
+                    "        color: " + color2 + ";\n"
+                    "        font-family: 'verdana';\n"
+                    "        font-size: 20px;\n"
+                    "        text-decoration: none;\n"
+                    "        border: none;\n"
+                    "    }\n"
+                    "    #submit:hover {\n"
+                    "        border: none;\n"
+                    "        background: cyan;\n"
+                    "        box-shadow: 0px 0px 1px #777;\n"
+                    "  color: black;\n"
+                    "    }\n"
+                    "    body\n"
+                    "    {\n"
+                    "        color: " + color1 + ";\n"
+                    "        background-color: " + color2 + ";\n"
+                    "    }\n"
+                    "    .topnav {\n"
+                    "        background-color: " + color3 + ";\n"
+                    "        border-left: solid " + color1 + " 5px;\n"
+                    "        border-radius: 3px;\n"
+                    "        overflow: hidden;\n"
+                    "    }\n"
+                    "    .topnav a {\n"
+                    "        float: left;\n"
+                    "        color: " + color4 + ";\n"
+                    "        text-align: center;\n"
+                    "        padding: 4px 10px;\n"
+                    "        text-decoration: none;\n"
+                    "        font-size: 17px;\n"
+                    "        border-radius: 3px;\n"
+                    "        margin-top: 0.5rem;\n"
+                    "        margin-left: 0.5rem;\n"
+                    "        margin-right: 0.5rem;\n"
+                    "        margin-bottom: 0.5rem;\n"
+                    "    }\n"
+                    "    .topnav a:hover {\n"
+                    "        background-color: " + color1 + ";\n"
+                    "        color: black;\n"
+                    "    }\n"
+                    "    .topnav-right {\n"
+                    "        float: right;\n"
+                    "    }\n"
+                    "    h1 {\n"
+                    "        font-size: 1.7rem;\n"
+                    "        margin-top: 1rem;\n"
+                    "        margin-left: auto;\n"
+                    "        margin-right: auto;\n"
+                    "        background: " + color3 + ";\n"
+                    "        color: " + color4 + ";\n"
+                    "        padding: 0.2em 1em;\n"
+                    "        border-radius: 3px;\n"
+                    "        border-left: solid " + color1 + " 5px;\n"
+                    "        font-weight: 100;\n"
+                    "    }\n"
+                    "    h2 {\n"
+                    "        font-size: 1rem;\n"
+                    "        margin-top: 1rem;\n"
+                    "        margin-left: auto;\n"
+                    "        margin-right: auto;\n"
+                    "        background: " + color3 + ";\n"
+                    "        color: " + color4 + ";\n"
+                    "        padding: 0.2em 1em;\n"
+                    "        border-radius: 3px;\n"
+                    "        border-left: solid " + color1 + " 5px;\n"
+                    "        font-weight: 100;\n"
+                    "    }\n"
+                    "    h3 {\n"
+                    "        font-size: 1rem;\n"
+                    "        margin-top: 1rem;\n"
+                    "        margin-left: auto;\n"
+                    "        margin-right: auto;\n"
+                    "        background: " + color5 + ";\n"
+                    "        color: " + color2 + ";\n"
+                    "        padding: 0.2em 1em;\n"
+                    "        border-radius: 3px;\n"
+                    "        font-weight: 100;\n"
+                    "    }\n"
+                    "    .column {\n"
+                    "        margin-left: 10rem;\n"
+                    "        margin-right: 10rem;\n"
+                    "    }\n"
+                    "    .column input {\n"
+                    "        float: right;\n"
+                    "        margin-top: 0.5rem;\n"
+                    "        background: transparent;\n"
+                    "        color: " + color4 + ";\n"
+                    "        outline: 0;\n"
+                    "        border: 0;\n"
+                    "        border-bottom: solid " + color1 + " 2px;\n"
+                    "        font-size: 14px;\n"
+                    "    }\n"
+                    "    .column input {\n"
+                    "        clear: both;\n"
+                    "    }\n"
+                    "    .column span {\n"
+                    "        margin-top: 0.5rem;\n"
+                    "        display: inline-block;\n"
+                    "    }\n"
+                    "    .column about {\n"
+                    "      font-size: +12px;\n"
+                    "    }\n"
+                    "\n"    
+                    "    .prefix {\n"
+                    "      display: flex;\n"
+                    "        justify-content: space-between;\n"
+                    "    }\n"
+                    "\n"    
+                    "    hr {\n"
+                    "      border-color: " + color3 + ";\n"
+                    "        background-color: " + color3 + ";\n"
+                    "        height: 2px;\n"
+                    "        border: none;\n"
+                    "    }\n"
+                    "</style>\n";
+  return page_style_css;
+}
 
 // Html string that holds the menu
-String menu_html =  "<div class=\"topnav\">"
-                    "  <a href=\"/\">Home</a>"
-                    "  <a href=\"settings\">Settings</a>"
-                    "  <a href=\"api/settings\">API</a>"
-                    "  <div class=\"topnav-right\">"
-                    "    <a href=\"about\">About</a>"
-                    "  </div>"
-                    "</div>";
+String menu_html =  "<div class=\"topnav\">\n"
+                    "  <a href=\"/\">Home</a>\n"
+                    "  <a href=\"settings\">Settings</a>\n"
+                    "  <a href=\"api/settings\">API</a>\n"
+                    "  <div class=\"topnav-right\">\n"
+                    "    <a href=\"about\">About</a>\n"
+                    "  </div>\n"
+                    "</div>\n";
 
 // Reset html page
-String reset_html = page_style_css +
+String reset_html = GenPageStyleCSS() +
                     menu_html +
                     "<h1 class=\"header\" data-translate=\"restart\">Restart</h1>"
                     "<br>"
@@ -194,7 +194,7 @@ String reset_html = page_style_css +
                     
                     
 // About html page
-String about_html = page_style_css +
+String about_html = GenPageStyleCSS() +
                     menu_html +
                     "<h1 class=\"header\" data-translate=\"about\">About</h1>"
                     "<br>"
@@ -204,13 +204,21 @@ String about_html = page_style_css +
 
 
 // Main index html page for web server
-String index_html = page_style_css +
+String index_html = GenPageStyleCSS() +
                     menu_html +
                     "<h1 class=\"header\" data-translate=\"home\">Home</h1>"
                     "<br>"
                     "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
                     "<br>"
                     "<center><span style=\"font-size: +50px\"/>I made a thing do some stuff</span></center>";
+
+String failed_authentication_html = GenPageStyleCSS() +
+                    menu_html + 
+                    "<h1 class=\"header\" data-translate=\"home\">Failed Authentication</h1>"
+                    "<br>"
+                    "<center><span style=\"font-size: +100px\"/>ESP8266 Access Point</span></center>"
+                    "<br>"
+                    "<center><span style=\"font-size: +50px\"/>You have not authenticated with this page. Please visit Home.</span></center>";
                     
                     
 
@@ -225,76 +233,69 @@ String index_html = page_style_css +
 // Return 1 String
 String GenSettingsHTML()
 {
-  String settings_html = page_style_css +
-                    menu_html +
-                    "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>"
-                    "<html><body>"
-                    "    <div class=\"column\">"
-                    "    <form action=\"/restart_esp8266\">"
-                    "        <input type=\"submit\" id=\"submit\" value=\"Restart\"/>"
-                    "    </form>"
-                    "    <br><br><br>"
-                    "    <form name='frm' method='get'>"
-                    ""
-                    "            <h2 class=\"header\" data-translate=\"settings\">Admin Settings</h2>"
-                    "            <about/>Use these settings when logging in to this web page.</about>"
-                    "            <hr>"
-                    "            <br>"
-                    "            <span style='font-size: +14px'/>Connect to WiFi</span>"
-                    "";
+  String settings_html = GenPageStyleCSS();
+  settings_html = settings_html + menu_html + "<h1 class=\"header\" data-translate=\"settings\">Settings</h1>\n"
+                    "<html><body>\n"
+                    "    <div class=\"column\">\n"
+                    "    <form action=\"/restart_esp8266\">\n"
+                    "        <input type=\"submit\" id=\"submit\" value=\"Restart\"/>\n"
+                    "    </form>\n"
+                    "    <br><br><br>\n"
+                    "    <form name='frm' method='get'>\n"
+                    "            <h2 class=\"header\" data-translate=\"settings\">Admin Settings</h2>\n"
+                    "            <about/>Use these settings when logging in to this web page.</about>\n"
+                    "            <hr>\n"
+                    "            <br>\n"
+                    "            <span style='font-size: +14px'/>Connect to WiFi</span>\n";
 
   if (global_conf.connect_to_wifi)
-    settings_html = settings_html + "            <input type='checkbox' name='connect_to_wifi' checked><br>";
+    settings_html = settings_html + "            <input type='checkbox' name='connect_to_wifi' checked><br>\n";
   else
-    settings_html = settings_html + "            <input type='checkbox' name='connect_to_wifi'><br>";
+    settings_html = settings_html + "            <input type='checkbox' name='connect_to_wifi'><br>\n";
     
   settings_html = settings_html + ""
-                    "            <span style=\"font-size: +14px\"/>Admin Username</span>"
-                    "            <input type='text' name='www_username' value='" + global_conf.www_username + "' placeholder=\"Username\"><br>"
-                    "            <span style=\"font-size: +14px\"/>Admin Password</span>"
-                    "            <input type='password' name='www_password' value='" + global_conf.www_password + "' placeholder=\"Password\"><br>"
-                    "            <br><br>"
-                    ""
-                    "            <h2 class=\"header\" data-translate=\"settings\">WiFi Connection Settings</h2>"
-                    "            <about/>Use these settings to connect this device to a WiFi Network in your area.</about>"
-                    "            <hr>"
-                    "            <br>"
-                    "            <span style=\"font-size: +14px\"/>WiFi Connection SSID</span>"
-                    "            <input type='text' name='new_target_ssid' value='" + global_conf.clientSSID + "' placeholder=\"SSID\"><br>"
-                    "            <span style=\"font-size: +14px\"/>WiFi Connection Password</span>"
-                    "            <input type='password' name='new_target_password' value='" + global_conf.clientPassword + "' placeholder=\"Password\"><br>"
-                    "            <br><br>"
-                    ""
-                    "            <h2 class=\"header\" data-translate=\"settings\">Access Point Settings</h2>"
-                    "            <about/>Use these settings to configure this device's access point. These settings will be used by other wireless clients when they connect to this device.</about>"
-                    "            <hr>"
-                    "            <br>"
-                    "            <span style=\"font-size: +14px\"/>Access Point SSID</span>"
-                    "            <input type='text' name='new_ssid' value='" + global_conf.apSSID + "' placeholder=\"SSID\"><br>"
-                    "            <span style=\"font-size: +14px\"/>Access Point Password</span>"
-                    "            <input type='password' name='new_password' value='" + global_conf.apPassword + "' placeholder=\"Password\"><br>"
-                    "            <br><br>"
-                    ""
-                    "            <h2 class=\"header\" data-translate=\"settings\">mDNS Settings</h2>"
-                    "            <about/>The mDNS settings are used to ensure other clients on the same network can access this device using a domain name rather than an IP address.</about>"
-                    "            <br>"
-                    "            <about/><b>Note:</b> The domain name will have a default prefix of \"" + domain_name_prefix + "\".</about>"
-                    "            <hr>"
-                    "            <br>"
-                    "            <div class='prefix'>"
-                    "                <span style='font-size: +14px'/>mDNS Domain Name</span>"
-                    "                <div style='text-align: right'>"
-                    "                    <span style='font-size: +14px'/>" + domain_name_prefix + "-</span>"
-                    "                    <input type='text' name='new_hostname' value='" + global_conf.hostname + "' placeholder='Hostname'>"
-                    "                </div>"
-                    "            </div>"
-                    "            <h3 class='header' data-translate='settings'><spon style='font-size: +14px'>URL</spon><spon style='float: right;font-size: +14px'>http://" + ConvertHostname() + ".local</spon></h3>"
-                    "            <br><br>"
-                    "            <input type='submit' id='submit' value='Apply'>"
-                    "      </form>"
-                    ""
-                    "    </div>"
-                    "</body></html>";
+                    "            <span style=\"font-size: +14px\"/>Admin Username</span>\n"
+                    "            <input type='text' name='www_username' value='" + global_conf.www_username + "' placeholder=\"Username\"><br>\n"
+                    "            <span style=\"font-size: +14px\"/>Admin Password</span>\n"
+                    "            <input type='password' name='www_password' value='" + global_conf.www_password + "' placeholder=\"Password\"><br>\n"
+                    "            <br><br>\n"
+                    "            <h2 class=\"header\" data-translate=\"settings\">WiFi Connection Settings</h2>\n"
+                    "            <about/>Use these settings to connect this device to a WiFi Network in your area.</about>\n"
+                    "            <hr>\n"
+                    "            <br>\n"
+                    "            <span style=\"font-size: +14px\"/>WiFi Connection SSID</span>\n"
+                    "            <input type='text' name='new_target_ssid' value='" + global_conf.clientSSID + "' placeholder=\"SSID\"><br>\n"
+                    "            <span style=\"font-size: +14px\"/>WiFi Connection Password</span>\n"
+                    "            <input type='password' name='new_target_password' value='" + global_conf.clientPassword + "' placeholder=\"Password\"><br>\n"
+                    "            <br><br>\n"
+                    "            <h2 class=\"header\" data-translate=\"settings\">Access Point Settings</h2>\n"
+                    "            <about/>Use these settings to configure this device's access point. These settings will be used by other wireless clients when they connect to this device.</about>\n"
+                    "            <hr>\n"
+                    "            <br>\n"
+                    "            <span style=\"font-size: +14px\"/>Access Point SSID</span>\n"
+                    "            <input type='text' name='new_ssid' value='" + global_conf.apSSID + "' placeholder=\"SSID\"><br>\n"
+                    "            <span style=\"font-size: +14px\"/>Access Point Password</span>\n"
+                    "            <input type='password' name='new_password' value='" + global_conf.apPassword + "' placeholder=\"Password\"><br>\n"
+                    "            <br><br>\n"
+                    "            <h2 class=\"header\" data-translate=\"settings\">mDNS Settings</h2>\n"
+                    "            <about/>The mDNS settings are used to ensure other clients on the same network can access this device using a domain name rather than an IP address.</about>\n"
+                    "            <br>\n"
+                    "            <about/><b>Note:</b> The domain name will have a default prefix of \"" + domain_name_prefix + "\".</about>\n"
+                    "            <hr>\n"
+                    "            <br>\n"
+                    "            <div class='prefix'>\n"
+                    "                <span style='font-size: +14px'/>mDNS Domain Name</span>\n"
+                    "                <div style='text-align: right'>\n"
+                    "                    <span style='font-size: +14px'/>" + domain_name_prefix + "-</span>\n"
+                    "                    <input type='text' name='new_hostname' value='" + global_conf.hostname + "' placeholder='Hostname'>\n"
+                    "                </div>\n"
+                    "            </div>\n"
+                    "            <h3 class='header' data-translate='settings'><spon style='font-size: +14px'>URL</spon><spon style='float: right;font-size: +14px'>http://" + ConvertHostname() + ".local</spon></h3>\n"
+                    "            <br><br>\n"
+                    "            <input type='submit' id='submit' value='Apply'>\n"
+                    "      </form>\n"
+                    "    </div>\n"
+                    "</body></html>\n";
 
   return settings_html;
 }
@@ -363,11 +364,6 @@ void SetServerBehavior()
   }
   
   //server.on("/", HandleClient);
-  //server.on("/restart_esp8266", RestartESP);
-  //server.on("/settings", SettingsESP);
-  //server.on("/about", AboutESP);
-  //server.on("/api/settings", APIESP);
-  //server.on("/api/set", ProcessJSONPost);
 
   // Check for authentication on all pages
   server.on("/", [](){
@@ -400,6 +396,12 @@ void SetServerBehavior()
       return server.requestAuthentication();
     ProcessJSONPost();
   });
+
+  //server.on("/restart_esp8266", RestartESP);
+  //server.on("/settings", SettingsESP);
+  //server.on("/about", AboutESP);
+  //server.on("/api/settings", APIESP);
+  //server.on("/api/set", ProcessJSONPost);
   
   server.begin();
 
@@ -579,6 +581,8 @@ bool saveConfig() {
 // No Return
 void SettingsESP()
 {
+  //if (authenticated)
+  //{
   if (server.args() > 0)
   {
     Serial.println("Server arguments received");
@@ -642,9 +646,15 @@ void SettingsESP()
     saveConfig();
   }
   // Show response AFTER setting new config
-  server.send(200, "text/html", GenSettingsHTML());
+  String settings_html = GenSettingsHTML();
+  delay(1000);
+  server.send(200, "text/html", settings_html);
+  Serial.println(settings_html);
 
   Serial.println("-----------------------------------------");
+  //}
+  //else
+  //  server.send(200, "text/html", failed_authentication_html);
 }
 
 
@@ -673,6 +683,8 @@ String HideString(String plain)
 // No Return
 void APIESP()
 { 
+  //if (authenticated)
+  //{
   String json_string = "{\n";
   if (global_conf.connect_to_wifi)
     json_string = json_string + "    \"connect_to_wifi\": true,\n";
@@ -686,6 +698,9 @@ void APIESP()
                 "    \"www_username\": \"" + global_conf.www_username + "\""
                 "}";
   server.send(200, "application/json", json_string);
+  //}
+  //else
+  //  server.send(200, "text/html", failed_authentication_html);
 }
 
 
@@ -695,6 +710,8 @@ void APIESP()
 // No Return
 void ProcessJSONPost()
 {
+  //if (authenticated)
+  //{
   server.send(200, "application/json", "{\"success\": true}");
   if (server.args() > 0)
   {
@@ -781,6 +798,9 @@ void ProcessJSONPost()
       }
     }
   }
+  //}
+  //else
+  //  server.send(200, "text/html", failed_authentication_html);
 }
 
 
@@ -792,9 +812,14 @@ void ProcessJSONPost()
 // No Return
 void RestartESP()
 {
+  //if (authenticated)
+  //{
   server.send(200, "text/html", reset_html);
   delay(5000);
   ESP.reset();
+  //}
+  //else
+  //  server.send(200, "text/html", failed_authentication_html);
 }
 
 
@@ -818,7 +843,10 @@ void HandleClient()
 // No Return
 void AboutESP()
 {
+  //if (authenticated)
   server.send(200, "text/html", about_html);
+  //else
+  //  server.send(200, "text/html", failed_authentication_html);
 }
 
 
@@ -828,7 +856,7 @@ void AboutESP()
 
 void setup() {
   pinMode(esp12led, OUTPUT);
-  pinMode(nodemculed, OUTPUT);
+  //pinMode(nodemculed, OUTPUT);
 
   Serial.begin(115200);
   Serial.println("------------------------------------");

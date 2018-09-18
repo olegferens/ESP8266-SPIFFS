@@ -1,3 +1,10 @@
+////////////////////Flash Settings////////////////////
+//      Board:      NodeMCU 1.0(ESP-12E Module)     //
+//      CPU Freq:   160MHz                          //
+//      Flash Size: 4M (3M SPIFFS)                  //
+////////////////////Flash Settings////////////////////
+
+
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h>
